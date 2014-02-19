@@ -26,7 +26,7 @@
         </div><!-- End Page Wide --> 
 		    
         <div class="page-wide">  
-            <a href="ofbook.pdf">download as pdf</a></li>
+            <a href="ofBook.pdf">download as pdf</a></li>
         </div><!-- End Page Wide -->
 
       </div><!-- End Body Wrap -->

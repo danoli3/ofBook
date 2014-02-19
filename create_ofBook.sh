@@ -26,9 +26,9 @@ FILES=$(find $(pwd) -type f -name "chapter.md" | sort | tr "\n" " ")
 
 # put all the images into an images folder in the root folder, so that
 # pandoc finds them from relative links
-mkdir -p images
-rm -rf ./images/*
-cp ./*/images/*.* ./images/
+#mkdir -p images
+#rm -rf ./images/*
+#cp ./*/images/*.* ./images/
 
 # option string construction
 if [ $1 = "html" ] ; then
@@ -47,15 +47,16 @@ else
 fi
 
 #create the book
-pandoc $FILES $OPTS -o ofBook.$1
+
+for f in `dirname */chapter.md`; do sed "s/!\[\([^]]*\)\](\([^)]*\))/![\1]($f\/\2)/g"  $f/chapter.md | sed "s/<img src=\"\([^\"]*\)\"/<img src=\"$f\/\1\"/g"; printf "\n\n\n\n"; done  | pandoc $OPTS -o ofBook.$1 
 retval=$?
 
-if [ "$retval" == 0 ] ; then
+#if [ "$retval" == 0 ] ; then
     #remove temporary image folder
-    rm -rf ./images
-else
-    echo "Some error occured!"
-fi
+    #rm -rf ./images
+#else
+#    echo "Some error occured!"
+#fi
 
 exit $retval
 
