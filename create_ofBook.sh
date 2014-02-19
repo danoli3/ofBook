@@ -6,7 +6,8 @@
 #        ./create_ofBook.sh tex
 # List detected files:
 #        ./create_ofBook.sh debug
-
+#
+# requires Pandoc 1.12
 # Pandoc options here: http://johnmacfarlane.net/pandoc/README.html#synopsis
 
 # general options:
@@ -21,10 +22,13 @@ LATEX_OPTS="--latex-engine=xelatex -V papersize=a4 -V documentclass=scrbook -V l
 HTML_OPTS="--self-contained --mathml"
 
 # Find chapter files
-FILES=$(find . -type f -name "chapter.md" | sort | tr "\n" " ")
+FILES=$(find $(pwd) -type f -name "chapter.md" | sort | tr "\n" " ")
 
-
-
+# put all the images into an images folder in the root folder, so that
+# pandoc finds them from relative links
+mkdir -p images
+rm -rf ./images/*
+cp ./*/images/*.* ./images/
 
 # option string construction
 if [ $1 = "html" ] ; then
@@ -42,12 +46,18 @@ else
     exit 1
 fi
 
-# echo $OPTS
-
-
-
+#create the book
 pandoc $FILES $OPTS -o ofBook.$1
+retval=$?
 
+if [ "$retval" == 0 ] ; then
+    #remove temporary image folder
+    rm -rf ./images
+else
+    echo "Some error occured!"
+fi
+
+exit $retval
 
 
 
